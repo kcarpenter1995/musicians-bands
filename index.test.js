@@ -23,4 +23,25 @@ describe('Band and Musician Models', () => {
         const musician = await Musician.create({name: 'Ringo Star'})
         expect(musician.name).toBe('Ringo Star');
     })
+
+    test('Has many musicians', async () => {
+        const band = await Band.create({name: 'Beatles', genre: 'Rock'});
+
+        const ringo = await Musician.create({name: 'Ringo Star', instrument: 'Drums'});
+        const john = await Musician.create({name: 'John Lennon', instrument: 'Lead Vocals and Guitar'});
+        const paul = await Musician.create({name: 'Paul McCartney', instrument: 'Backup Vocals and Keyboard'});
+        const george = await Musician.create({name: 'George Harrison', instrument: 'Guitar'});
+
+        await band.addMusician(ringo);
+        await band.addMusician(john);
+        await band.addMusician(paul);
+        await band.addMusician(george);
+        
+        const musicians = await band.getMusicians();
+
+        expect(musicians.length).toBe(4);
+        expect(musicians[0] instanceof Musician).toBeTruthy;
+
+    })    
+            
 })
